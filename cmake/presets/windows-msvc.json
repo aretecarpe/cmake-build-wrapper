@@ -5,7 +5,7 @@
 			"name": "windows-base",
 			"displayName": "Windows Base",
 			"hidden": true,
-			"inherits": "custom_presets",
+			"inherits": "wrapper_presets",
 			"vendor": {
 				"microsoft.com/VisualStudioSettings/CMake/1.0": {
 					"hostOS": ["Windows"]
