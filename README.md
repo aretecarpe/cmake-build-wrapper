@@ -24,6 +24,7 @@ git clone https://github.com/mkmemy/cmake-build-wrapper
 ```
 
 ## Usage
+For an example utilizing the cmake build wrapper refer [here](https://github.com/mkmemy/example-cmake-project)
 
 ### Project Config
 
