@@ -1,0 +1,9 @@
+{
+	"name": "example-project",
+	"description": "A sample project-config example",
+	"version": "1.0.0",
+	"products": [
+		"relative_path_to_product1",
+		"relative_path_to_product2"
+	]
+}
