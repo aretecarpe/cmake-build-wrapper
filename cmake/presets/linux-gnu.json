@@ -9,7 +9,7 @@
 			"displayName": "LINUX-GNU",
 			"hidden": true,
 			"generator": "Unix Makefiles",
-			"inherits": "custom_presets",
+			"inherits": "wrapper_presets",
 			"vendor": {
 				"microsoft.com/VisualStudioSettings/CMake/1.0": {
 					"hostOS": ["Linux"]
