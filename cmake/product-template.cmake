@@ -181,7 +181,7 @@ if(${PRODUCT_INSTALL})
 		DESTINATION ${DEPLOYED_CMAKE_PATH}
 	)
 
-	configure_file("${CMAKE_PATH}/project-config.cmake"
+	configure_file("${CMAKE_SOURCE_DIR}/cmake/project-config.cmake"
 		"${DEPLOYED_CMAKE_TEMP_PATH}/${PRODUCT_NAME}-config.cmake"
 		@ONLY
 	)
