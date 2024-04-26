@@ -160,10 +160,13 @@ if(${PRODUCT_INSTALL})
 		ARCHIVE DESTINATION ${PRODUCT_SPEC}/lib/${CMAKE_BUILD_TYPE}
 	)
 
+	# Iterate through each header file
 	foreach(file ${DEPLOYED_HEADERS})
+		get_filename_component(directory "${file}" DIRECTORY)
+		# Install the file with its directory structure preserved
 		install(
-			FILES ${file}
-			DESTINATION ${PRODUCT_SPEC}/include/${PRODUCT_NAME}
+			FILES "${file}"
+			DESTINATION "${PRODUCT_SPEC}/include/${PRODUCT_NAME}/${directory}"
 		)
 	endforeach()
 
