@@ -39,17 +39,6 @@ if(NOT ${JSON_STATUS} STREQUAL "NOTFOUND")
 	message(FATAL_ERROR "product 'version' missing from product-config.json " ${JSON_STATUS})
 endif()
 
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-string(JSON PRODUCT_CPP_STANDARD ERROR_VARIABLE JSON_STATUS GET ${PRODUCT_CONTENT} "cpp_standard")
-if(NOT ${JSON_STATUS} STREQUAL "NOTFOUND")
-	message(FATAL_ERROR "product 'cpp_standard' missing from product-config.json " ${JSON_STATUS})
-endif()
-set(CMAKE_CXX_STANDARD ${PRODUCT_CPP_STANDARD})
-if (NOT CMAKE_CXX_STANDARD MATCHES "11|14|17|20|23")
-	message(FATAL_ERROR "Invalid C++ standard: ${CMAKE_CXX_STANDARD}")
-endif()
-set(CXX_STANDARD "cxx_std_${CMAKE_CXX_STANDARD}")
-
 string(JSON PRODUCT_INSTALL ERROR_VARIABLE JSON_STATUS GET ${PRODUCT_CONTENT} "install_artifact")
 if(NOT ${JSON_STATUS} STREQUAL "NOTFOUND")
 	set(INSTALL_PRODUCT ON)
@@ -58,22 +47,76 @@ else()
 endif()
 
 string(JSON source ERROR_VARIABLE JSON_STATUS GET ${PRODUCT_CONTENT} "source")
-foreach(index RANGE 0 999)
-	string(JSON file ERROR_VARIABLE JSON_STATUS GET ${source} ${index})
-	if(NOT ${JSON_STATUS} STREQUAL "NOTFOUND")
-		break()
+string(REGEX MATCHALL "\"[^\"]+\"" FILE_MATCHES ${source})
+list(LENGTH FILE_MATCHES JSON_LENGTH)
+if (NOT "${PRODUCT_TYPE}" STREQUAL "header-only")
+	if (${JSON_LENGTH} EQUAL 0)
+		set(SOURCE_FILE "")
+
+		# Use file(GLOB ...) to find header files with extensions .cpp or .cxx
+		file(GLOB_RECURSE SOURCE_FILE
+			"${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+			"${CMAKE_CURRENT_SOURCE_DIR}/*.cxx"
+		)
+
+		# Iterate over each found header file and compute its relative path
+		foreach(file ${SOURCE_FILE})
+			cmake_path(GET file FILENAME filename)
+			cmake_path(GET file PARENT_PATH directory)
+			# Compute the relative path of the directory from the source directory
+			file(RELATIVE_PATH relative_directory "${CMAKE_CURRENT_SOURCE_DIR}" "${directory}")
+			# Append the relative path and the filename to the HEADER_FILES_WITH_RELATIVE_PATHS list
+			if("${relative_directory}" STREQUAL "")
+				list(APPEND SOURCE_FILES "${filename}")
+			else()
+				list(APPEND SOURCE_FILES "${relative_directory}/${filename}")
+			endif()
+		endforeach()
+	else()
+		foreach(index RANGE 0 ${JSON_LENGTH})
+			string(JSON file ERROR_VARIABLE JSON_STATUS GET ${source} ${index})
+			if(NOT ${JSON_STATUS} STREQUAL "NOTFOUND")
+				break()
+			endif()
+			list(APPEND SOURCE_FILES ${file})	
+		endforeach()
 	endif()
-	list(APPEND SOURCE_FILES ${file})	
-endforeach()
+endif()
 
 string(JSON deployed_headers ERROR_VARIABLE JSON_STATUS GET ${PRODUCT_CONTENT} "deployed_headers")
-foreach(index RANGE 0 999)
-	string(JSON file ERROR_VARIABLE JSON_STATUS GET ${deployed_headers} ${index})
-	if(NOT ${JSON_STATUS} STREQUAL "NOTFOUND")
-		break()
-	endif()
-	list(APPEND DEPLOYED_HEADERS ${file})	
-endforeach()
+string(REGEX MATCHALL "\"[^\"]+\"" FILE_MATCHES ${deployed_headers})
+list(LENGTH FILE_MATCHES JSON_LENGTH)
+if(${JSON_LENGTH} EQUAL 0)
+	set(HEADER_FILES "")
+
+	# Use file(GLOB ...) to find header files with extensions .hpp or .h
+	file(GLOB_RECURSE HEADER_FILES
+		"${CMAKE_CURRENT_SOURCE_DIR}/*.hpp"
+		"${CMAKE_CURRENT_SOURCE_DIR}/*.h"
+	)
+
+	# Iterate over each found header file and compute its relative path
+	foreach(file ${HEADER_FILES})
+		cmake_path(GET file FILENAME filename)
+		cmake_path(GET file PARENT_PATH directory)
+		# Compute the relative path of the directory from the source directory
+		file(RELATIVE_PATH relative_directory "${CMAKE_CURRENT_SOURCE_DIR}" "${directory}")
+		# Append the relative path and the filename to the HEADER_FILES_WITH_RELATIVE_PATHS list
+		if("${relative_directory}" STREQUAL "")
+			list(APPEND DEPLOYED_HEADERS "${filename}")
+		else()
+			list(APPEND DEPLOYED_HEADERS "${relative_directory}/${filename}")
+		endif()
+	endforeach()
+else()
+	foreach(index RANGE 0 ${JSON_LENGTH})
+		string(JSON file ERROR_VARIABLE JSON_STATUS GET ${deployed_headers} ${index})
+		if(NOT ${JSON_STATUS} STREQUAL "NOTFOUND")
+			break()
+		endif()
+		list(APPEND DEPLOYED_HEADERS ${file})	
+	endforeach()
+endif()
 
 set(PRODUCT_SPEC ${PRODUCT_NAME}-${PRODUCT_VERSION}-${ARCHITECTURE}-${OS}-${TARGET_COMPILER})
 set(PRODUCT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
