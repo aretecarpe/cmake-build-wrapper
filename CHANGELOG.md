@@ -2,6 +2,10 @@
 
 ### cmake-build-wrapper
 
+## 0.0.3
+* Fix for windows target properties
+* Fix for presets for windows.
+
 ## 0.0.2
 * Added support for multi-level include installs for projects.
 * Added support for non-listing of header/source files. We will automatically find .h/.hpp headers or .cpp/.cxx source files.

@@ -1,5 +1,8 @@
 {
 	"version": 4,
+	"include": [
+		"../../CMakePresetsProject.json"
+	],
 	"configurePresets": [
 		{
 			"name": "windows-base",

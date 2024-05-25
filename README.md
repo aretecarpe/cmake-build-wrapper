@@ -6,7 +6,7 @@ A light wrapper on cmake to aid in the creation of header-only, static, or share
 
 This section describes the release notes for the CMake Build Wrapper.
 
-### CMake Build Wrapper 0.0.2
+### CMake Build Wrapper 0.0.3
 
 ### [changelog...](./CHANGELOG.md)
 
