@@ -2,6 +2,10 @@
 
 ### cmake-build-wrapper
 
+## 0.0.4
+* Fix for updating cmake cache
+* All projects now utilize namespaces by default.
+
 ## 0.0.3
 * Fix for windows target properties
 * Fix for presets for windows.

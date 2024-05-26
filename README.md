@@ -6,7 +6,7 @@ A light wrapper on cmake to aid in the creation of header-only, static, or share
 
 This section describes the release notes for the CMake Build Wrapper.
 
-### CMake Build Wrapper 0.0.3
+### CMake Build Wrapper 0.0.4
 
 ### [changelog...](./CHANGELOG.md)
 
@@ -20,11 +20,11 @@ The only requirements is a CMake version greater than 3.20.
 
 Using git clone the repository using the command below.
 ```
-git clone https://github.com/mkmemy/cmake-build-wrapper
+git clone https://github.com/aretecarpe/cmake-build-wrapper
 ```
 
 ## Usage
-For an example utilizing the cmake build wrapper refer [here](https://github.com/mkmemy/example-cmake-project)
+For an example utilizing the cmake build wrapper refer [here](https://github.com/aretecarpe/example-cmake-project)
 
 ### Project Config
 
