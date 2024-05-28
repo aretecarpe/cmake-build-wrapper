@@ -2,6 +2,9 @@
 
 ### cmake-build-wrapper
 
+## 0.0.5
+* Fix for conditionally enabling tests and examples via cmake vars.
+
 ## 0.0.4
 * Fix for updating cmake cache
 * All projects now utilize namespaces by default.
